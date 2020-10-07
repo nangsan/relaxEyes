@@ -9,13 +9,13 @@ Your eye doctor may mentioned about it. It's basically for every 20 minutes spen
 ### Install
 
 ```shell
-curl https://raw.githubusercontent.com/nangsan/relaxEyes/main/install.sh | bash
+curl -s -L https://raw.githubusercontent.com/nangsan/relaxEyes/main/install.sh | bash
 ```
 
 ### Uninstall
 
 ```shell
-curl https://raw.githubusercontent.com/nangsan/relaxEyes/main/install.sh | uninstall=true bash
+curl -s -L https://raw.githubusercontent.com/nangsan/relaxEyes/main/install.sh | uninstall=true bash
 ```
 
 ### Usage
