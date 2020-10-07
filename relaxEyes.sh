@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
-# relaxEyes.sh
-# Reminds you to relax your eyes.
+
+# relaxEyes.sh - Reminds you to relax your eyes.
+#
 
 INSTALL_DIR="$HOME/.local/bin"
-
-# desktop file used for autostart
 DESKTOP_FILE="$HOME/.config/autostart/relaxEyes.desktop"
 
+# defaults
 BREAK_INTERVAL=20 # 20 seconds
 INTERVAL=1200     # 20 minute
-
-INCR=.50    # controls brightness
+INCR=.50          # controls brightness
 
 # set script name
 RELAX_EYES_SH=$(basename "$0")
@@ -30,12 +29,16 @@ show_usage() {
 }
 
 start_daemon() {
+    interval="$1"
+    break_interval="$2"
+    incr="$3"
+
     while true; do
-        sleep "$INTERVAL"
+        sleep "$interval"
         output=$(xrandr | grep -w connected | awk '{print $1}')   # Get display name!
-        decrease_brightness "$output" "$INCR"
-        sleep "$BREAK_INTERVAL"
-        increase_brightness "$output" "$INCR"
+        decrease_brightness "$output" "$incr"
+        sleep "$break_interval"
+        increase_brightness "$output" "$incr"
     done
 }
 
@@ -55,15 +58,16 @@ setup_autostart() {
 		[Desktop Entry]
 		Type=Application
 		Name=Relax Eyes
-		Comment=Reminds you to take break for your eyes
+		Comment=Reminds you to relax your eyes
 		Exec=$exec_path -d
 		Terminal=false
 		StartupNotify=false
 	EndFile
     echo
     echo "Autostart configuration done and you'll be reminded to take a break."
-    echo "Look out the window and enjoy the break!"
     echo "Now save you work then logout and login again!"
+    echo
+    echo "Psst! Look out the window and enjoy the break time."
     exit 0
 }
 
@@ -72,27 +76,33 @@ remove_autostart() {
         rm "$DESKTOP_FILE"
     fi
     echo
-    echo "Removed autostart configuration and you won't be reminded."
+    echo "Removed autostart configuration and you won't be reminded to take break."
     echo "Now save your work then logout and login again!"
     exit 0
 }
 
 decrease_brightness() {
+    output="$1"
+    incr="$2"
+
     old_brightness=$(xrandr --verbose | grep rightness | awk '{ print $2 }')
-    bright=$(echo "scale=2; $old_brightness - $2" | bc)
-    xrandr --output "$1" --brightness "$bright"
+    bright=$(echo "scale=2; $old_brightness - $incr" | bc)
+    xrandr --output "$output" --brightness "$bright"
 }
 
 increase_brightness() {
+    output="$1"
+    incr="$2"
+
     old_brightness=$(xrandr --verbose | grep rightness | awk '{ print $2 }')
-    bright=$(echo "scale=2; $old_brightness + $2" | bc)
-    xrandr --output "$1" --brightness "$bright"
+    bright=$(echo "scale=2; $old_brightness + $incr" | bc)
+    xrandr --output "$output" --brightness "$bright"
 }
 
 if [[ -z "$1" || "$1" = "-h" || "$1" = "--help" ]]; then
     show_usage
 elif [ "$1" = "-d" ]; then
-    start_daemon
+    start_daemon "$INTERVAL" "$BREAK_INTERVAL" "$INCR"
 elif [ "$1" = "-s" ]; then
     setup_autostart
 elif [ "$1" = "-r" ]; then
