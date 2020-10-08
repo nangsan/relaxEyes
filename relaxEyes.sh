@@ -43,6 +43,9 @@ start_daemon() {
 }
 
 setup_autostart() {
+    if ! [ -d "$HOME/.config/autostart" ]; then
+        mkdir -p "$HOME/.config/autostart"
+    fi
 
     # executable file
     exec_path="relaxEyes.sh"

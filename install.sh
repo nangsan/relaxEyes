@@ -9,7 +9,7 @@
 #
 # curl https://raw.githubusercontent.com/nangsan/relaxEyes/main/install.sh | uninstall=true bash
 
-INSTALL_SCRIPT="curl https://raw.githubusercontent.com/nangsan/relaxEyes/main/install.sh"
+INSTALL_SCRIPT="curl -s -L https://raw.githubusercontent.com/nangsan/relaxEyes/main/install.sh"
 
 INSTALL_DIR="$HOME/.local/bin"
 INSTALL_NAME="relaxEyes.sh"
